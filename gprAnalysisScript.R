@@ -13,10 +13,13 @@ options(stringsAsFactors = FALSE)
 
 # Set constants -- everything that will be hard coded
 
-gpr_directory = "~/Desktop/gpr_data/Slide_Batch_3_2015.05.05/gpr_files"
+gpr_directory = "~/Desktop/gpr_data/Sanjay"
 DMSO_pattern = "AB00010722"
-out_directory = "~/Desktop/gpr_data/Slide_Batch_3_2015.05.05"
-out_file = "Batch_3_hits_automated"
+out_directory = "~/Desktop/gpr_data"
+out_file = "Sanjay_hits_automated"
+zscore_cutoff = 1.7
+minFreq = 4
+maxFreq = 4
 
 # Loop over input directory
 
@@ -40,7 +43,7 @@ for( filename in list.files(gpr_directory)){
 
 
 
-highZ = gpr_master[gpr_master$zscore >= 1.7,]
+highZ = gpr_master[gpr_master$zscore >= zscore_cutoff,]
 highZRedacted = highZ[,c("id","zscore")]
 
 prelimHits = table(highZ$id)
@@ -50,7 +53,7 @@ colnames(Hits)[1] = "id"
 
 # filter for only hits that appear 4x
 HitsZ = merge(Hits, highZRedacted, by = "id")
-HitsZ = (HitsZ[HitsZ$freq == 4, 1:3])
+HitsZ = (HitsZ[HitsZ$freq %in% range(minFreq:maxFreq), 1:3])
 
 # filter out DMSO hits
 # grepl means "grep logical", and returns TRUE or FALSE
