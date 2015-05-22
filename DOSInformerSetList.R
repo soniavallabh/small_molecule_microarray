@@ -19,9 +19,12 @@ for (filename in list.files(plateMapDirectory)) {
 
 write.table(master, "DOS_informer_set_full_list", sep="\t", quote = FALSE, row.names = FALSE, col.names = TRUE) 
 
+# Create a list of only Broad IDs, removing all blank rows
+write.table(master$broad_sample[master$broad_sample != ""], "DOS_informer_set_BRDs", quote = FALSE, row.names = FALSE, col.names = FALSE)
 
 
-
+# For troubleshooting: check the number of blank rows before removing
+# table(master$broad_sample !="")
 
 
 
